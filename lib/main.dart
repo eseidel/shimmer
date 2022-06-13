@@ -1,12 +1,15 @@
-import 'dart:math';
+import 'dart:ui' as ui;
 
+import 'package:shimmer/geometry.dart';
+
+import 'grid.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/effects.dart';
 import 'package:radiance/steering.dart';
+import 'package:flutter/material.dart';
 
 class SpinningSquare extends PositionComponent {
   static final _paint = Paint()..color = Colors.green;
@@ -118,11 +121,25 @@ class TapIndicator extends PositionComponent {
 class ShimmerGame extends FlameGame with TapDetector {
   late Player player;
 
+  Future<Grid<bool>> obstacleGridFromImage(ui.Image image) async {
+    var bytes = await image.toByteData();
+
+    return Future.value(
+        Grid.filled(ISize(image.height, image.height), (GridPosition position) {
+      var value = bytes!.getInt32(position.x * position.y);
+      var color = Color(value);
+      return color.red > 128 || color.green > 128 || color.blue > 128;
+    }));
+  }
+
   @override
   Future<void> onLoad() async {
-    add(Map());
+    final mapImage = await images.load('map.png');
+    final obstacleGrid = await obstacleGridFromImage(mapImage);
+    var map = NewMap(obstacleGrid);
+    add(map);
     add(player = Player(size: 50, position: size / 2));
-    camera.followComponent(player, worldBounds: Map.bounds);
+    camera.followComponent(player, worldBounds: map.bounds);
   }
 
   @override
@@ -133,9 +150,10 @@ class ShimmerGame extends FlameGame with TapDetector {
   }
 }
 
-class Map extends Component {
-  static const double size = 1500;
-  static const Rect bounds = Rect.fromLTWH(-size, -size, 2 * size, 2 * size);
+class NewMap extends Component {
+  static const double multiplier = 10;
+  Grid<bool> obstacleGrid;
+  Rect bounds;
 
   static final Paint _paintBorder = Paint()
     ..color = Colors.white12
@@ -143,40 +161,80 @@ class Map extends Component {
     ..style = PaintingStyle.stroke;
   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
 
-  static final _rng = Random();
-
-  late final List<Paint> _paintPool;
   late final List<Rect> _rectPool;
 
-  Map() : super(priority: 0) {
-    _paintPool = List<Paint>.generate(
-      (size / 50).ceil(),
-      (_) => PaintExtension.random(rng: _rng)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-      growable: false,
-    );
-    _rectPool = List<Rect>.generate(
-      (size / 50).ceil(),
-      (i) => Rect.fromCircle(center: Offset.zero, radius: size - i * 50),
-      growable: false,
-    );
+  NewMap(this.obstacleGrid)
+      : bounds = Rect.fromLTWH(0, 0, obstacleGrid.width * multiplier,
+            obstacleGrid.height * multiplier),
+        super(priority: 0) {
+    _rectPool = [];
+    for (var position in obstacleGrid.allPositions) {
+      if (obstacleGrid.get(position) == true) {
+        _rectPool.add(Rect.fromLTWH(multiplier * position.x,
+            multiplier * position.y, multiplier, multiplier));
+      }
+    }
   }
 
   @override
   void render(Canvas canvas) {
     canvas.drawRect(bounds, _paintBg);
     canvas.drawRect(bounds, _paintBorder);
-    for (var i = 0; i < (size / 50).ceil(); i++) {
-      canvas.drawCircle(Offset.zero, size - i * 50, _paintPool[i]);
-      canvas.drawRect(_rectPool[i], _paintBorder);
+    for (var rect in _rectPool) {
+      canvas.drawRect(rect, _paintBorder);
     }
   }
-
-  static double genCoord() {
-    return -size + _rng.nextDouble() * (2 * size);
-  }
 }
+
+// Load image
+// decode
+// Make Grid from image
+// Draw Map from grid?
+
+// class Map extends Component {
+//   static const double size = 1500;
+//   static const Rect bounds = Rect.fromLTWH(-size, -size, 2 * size, 2 * size);
+
+//   static final Paint _paintBorder = Paint()
+//     ..color = Colors.white12
+//     ..strokeWidth = 10
+//     ..style = PaintingStyle.stroke;
+//   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
+
+//   static final _rng = Random();
+
+//   late final List<Paint> _paintPool;
+//   late final List<Rect> _rectPool;
+
+//   Map() : super(priority: 0) {
+//     _paintPool = List<Paint>.generate(
+//       (size / 50).ceil(),
+//       (_) => PaintExtension.random(rng: _rng)
+//         ..style = PaintingStyle.stroke
+//         ..strokeWidth = 2,
+//       growable: false,
+//     );
+//     _rectPool = List<Rect>.generate(
+//       (size / 50).ceil(),
+//       (i) => Rect.fromCircle(center: Offset.zero, radius: size - i * 50),
+//       growable: false,
+//     );
+//   }
+
+//   @override
+//   void render(Canvas canvas) {
+//     canvas.drawRect(bounds, _paintBg);
+//     canvas.drawRect(bounds, _paintBorder);
+//     for (var i = 0; i < (size / 50).ceil(); i++) {
+//       canvas.drawCircle(Offset.zero, size - i * 50, _paintPool[i]);
+//       canvas.drawRect(_rectPool[i], _paintBorder);
+//     }
+//   }
+
+//   static double genCoord() {
+//     return -size + _rng.nextDouble() * (2 * size);
+//   }
+// }
 
 class MyGame extends StatelessWidget {
   const MyGame({super.key});

@@ -11,20 +11,24 @@ import 'package:radiance/steering.dart';
 class SpinningSquare extends PositionComponent {
   static final _paint = Paint()..color = Colors.green;
 
+  SpinningSquare({required double size, super.position})
+      : super(size: Vector2(size, size), anchor: Anchor.center);
+
   @override
   Future<void>? onLoad() {
-    add(
-      RectangleComponent.square(
-        size: width,
-        paint: _paint,
-        anchor: Anchor.center,
-      )..add(
-          RotateEffect.by(
-            2 * pi,
-            EffectController(duration: 3, infinite: true),
-          ),
-        ),
-    );
+    add(RectangleComponent.square(
+      size: width,
+      paint: _paint,
+      position: size / 2,
+      anchor: Anchor.center,
+    )
+        // ..add(
+        //     RotateEffect.by(
+        //       2 * pi,
+        //       EffectController(duration: 3, infinite: true),
+        //     ),
+        //   ),
+        );
     return super.onLoad();
   }
 }
@@ -39,7 +43,7 @@ class NavigationComponent extends Component with Steerable {
   @override
   double angularVelocity = 0;
   @override
-  Kinematics kinematics = LightKinematics(10);
+  Kinematics kinematics = LightKinematics(100);
 
   PositionComponent? get positionParent => parent as PositionComponent;
 
@@ -64,7 +68,12 @@ class NavigationComponent extends Component with Steerable {
       return;
     }
     behavior!.update(dt);
-    positionParent!.position += velocity;
+    if (velocity.isZero()) {
+      // Seek stopped, so clear it.
+      behavior = null;
+    } else {
+      positionParent!.position += velocity.scaled(dt);
+    }
 
     super.update(dt);
   }
@@ -73,10 +82,13 @@ class NavigationComponent extends Component with Steerable {
 class Player extends PositionComponent {
   late NavigationComponent nav;
 
+  Player({super.position, required double size})
+      : super(size: Vector2(size, size), anchor: Anchor.center);
+
   @override
   Future<void>? onLoad() {
     add(nav = NavigationComponent());
-    add(SpinningSquare()..width = width); // Renderer
+    add(SpinningSquare(size: width, position: size / 2)); // Renderer
     return super.onLoad();
   }
 }
@@ -109,12 +121,7 @@ class ShimmerGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     add(Map());
-    add(
-      player = Player()
-        ..position = size / 2
-        ..width = 50
-        ..anchor = Anchor.center,
-    );
+    add(player = Player(size: 50, position: size / 2));
     camera.followComponent(player, worldBounds: Map.bounds);
   }
 

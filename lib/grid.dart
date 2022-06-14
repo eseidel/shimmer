@@ -18,6 +18,9 @@ class GridPosition {
 
   @override
   int get hashCode => Object.hash(x, y);
+
+  @override
+  String toString() => "[$x, $y]";
 }
 
 class Grid<T> {

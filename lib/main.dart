@@ -1,6 +1,6 @@
-import 'dart:ui' as ui;
-
+import 'package:flutter/services.dart';
 import 'package:shimmer/geometry.dart';
+import 'package:image/image.dart' as img;
 
 import 'grid.dart';
 import 'package:flame/components.dart';
@@ -121,20 +121,21 @@ class TapIndicator extends PositionComponent {
 class ShimmerGame extends FlameGame with TapDetector {
   late Player player;
 
-  Future<Grid<bool>> obstacleGridFromImage(ui.Image image) async {
-    var bytes = await image.toByteData();
-
+  Future<Grid<bool>> obstacleGridFromImage(img.Image image) async {
     return Future.value(
         Grid.filled(ISize(image.height, image.height), (GridPosition position) {
-      var value = bytes!.getInt32(position.x * position.y);
-      var color = Color(value);
-      return color.red > 128 || color.green > 128 || color.blue > 128;
+      var color = image.getPixel(position.x, position.y);
+      // Treat darker pixels as obstacles, lighter as empty.
+      return img.getLuminance(color) < 128;
     }));
   }
 
   @override
   Future<void> onLoad() async {
-    final mapImage = await images.load('map.png');
+    var data = await rootBundle.load('assets/images/checker-4x4.png');
+    final buffer = data.buffer;
+    var ints = buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var mapImage = img.decodeImage(ints)!;
     final obstacleGrid = await obstacleGridFromImage(mapImage);
     var map = NewMap(obstacleGrid);
     add(map);
@@ -151,9 +152,13 @@ class ShimmerGame extends FlameGame with TapDetector {
 }
 
 class NewMap extends Component {
-  static const double multiplier = 10;
+  static const double multiplier = 100;
   Grid<bool> obstacleGrid;
   Rect bounds;
+
+  static final Paint _paintObstacle = Paint()
+    ..color = Colors.orange
+    ..style = PaintingStyle.fill;
 
   static final Paint _paintBorder = Paint()
     ..color = Colors.white12
@@ -164,8 +169,8 @@ class NewMap extends Component {
   late final List<Rect> _rectPool;
 
   NewMap(this.obstacleGrid)
-      : bounds = Rect.fromLTWH(0, 0, obstacleGrid.width * multiplier,
-            obstacleGrid.height * multiplier),
+      : bounds = Rect.fromLTWH(0, 0, (obstacleGrid.width + 1) * multiplier,
+            (obstacleGrid.height + 1) * multiplier),
         super(priority: 0) {
     _rectPool = [];
     for (var position in obstacleGrid.allPositions) {
@@ -181,15 +186,10 @@ class NewMap extends Component {
     canvas.drawRect(bounds, _paintBg);
     canvas.drawRect(bounds, _paintBorder);
     for (var rect in _rectPool) {
-      canvas.drawRect(rect, _paintBorder);
+      canvas.drawRect(rect, _paintObstacle);
     }
   }
 }
-
-// Load image
-// decode
-// Make Grid from image
-// Draw Map from grid?
 
 // class Map extends Component {
 //   static const double size = 1500;

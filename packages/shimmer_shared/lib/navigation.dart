@@ -1,6 +1,6 @@
 import 'package:radiance/steering.dart';
 import 'package:flame/components.dart';
-import 'package:shimmer/shared/geometry.dart';
+import 'package:shimmer_shared/geometry.dart';
 
 class UnitSystem {
   const UnitSystem();

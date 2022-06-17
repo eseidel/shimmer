@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
-import 'shared/geometry.dart';
-import 'shared/grid.dart';
-import 'shared/navigation.dart';
+import 'package:shimmer_shared/geometry.dart';
+import 'package:shimmer_shared/grid.dart';
+import 'package:shimmer_shared/navigation.dart';
 
 class PlayerRenderer extends PositionComponent {
   static final _paint = Paint()..color = Colors.green;

@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: shimmer_shared
+dependency_overrides:
+  shimmer_shared:
+    path: ../shimmer_shared

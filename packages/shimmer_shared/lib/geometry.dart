@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 class Delta {
   final int dx;
@@ -50,7 +49,7 @@ class Delta {
 
   @override
   int get hashCode {
-    return hashValues(dx, dy);
+    return Object.hash(dx, dy);
   }
 }
 
@@ -65,8 +64,6 @@ class Position {
   Delta deltaTo(Position other) {
     return Delta(other.x - x, other.y - y);
   }
-
-  Offset toOffset() => Offset(x.toDouble(), y.toDouble());
 
   @override
   String toString() => '($x, $y)';
@@ -91,7 +88,7 @@ class Position {
 
   @override
   int get hashCode {
-    return hashValues(x, y);
+    return Object.hash(x, y);
   }
 }
 
@@ -100,8 +97,6 @@ class ISize {
   final int height;
 
   const ISize(this.width, this.height);
-
-  Size toSize() => Size(width.toDouble(), height.toDouble());
 }
 
 class IRect {

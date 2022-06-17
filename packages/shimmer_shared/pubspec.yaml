@@ -7,11 +7,14 @@ environment:
   sdk: '>=2.17.3 <3.0.0'
 
 dependencies:
+  json_annotation: ^4.5.0
   radiance:
     git:
       url: https://github.com/flame-engine/radiance
       ref: 13161dd # commit hash
 
 dev_dependencies:
+  build_runner: ^2.1.11
+  json_serializable: ^6.2.0
   lints: ^2.0.0
   test: ^1.16.0

@@ -1,9 +1,14 @@
 import 'geometry.dart';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'network.g.dart';
+
 enum NetActionType {
   moveTo,
 }
 
+@JsonSerializable(explicitToJson: true)
 class NetClientInput {
   const NetClientInput({
     required this.action,
@@ -15,6 +20,10 @@ class NetClientInput {
   final NetActionType action;
   final Position position;
   final int msSinceStart;
+
+  factory NetClientInput.fromJson(Map<String, dynamic> json) =>
+      _$NetClientInputFromJson(json);
+  Map<String, dynamic> toJson() => _$NetClientInputToJson(this);
 }
 
 class NetAction {

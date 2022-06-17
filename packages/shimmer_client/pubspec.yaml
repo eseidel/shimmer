@@ -29,6 +29,7 @@ dependencies:
   image: ^3.2.0
   a_star_algorithm: ^0.3.0
   shimmer_shared: any
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

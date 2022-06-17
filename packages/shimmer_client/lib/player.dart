@@ -3,13 +3,18 @@ import 'package:shimmer_client/main.dart';
 import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/geometry.dart';
 
+import 'package:http/http.dart' as http;
+
 // Deals with actually sending things over the network from the client.
 class NetworkClient {
-  final Uri endpoint;
+  final Uri baseEndpoint;
 
-  NetworkClient(this.endpoint);
+  NetworkClient(this.baseEndpoint);
 
-  void sendInput(NetClientInput input) {}
+  void sendInput(NetClientInput input) {
+    var endpoint = baseEndpoint.resolve('input');
+    http.post(endpoint, body: input.toJson().toString());
+  }
 
   NetClientUpdate? getLatestUpdate() {
     return null;
@@ -35,23 +40,25 @@ class Client {
 
 // Abstract interface for server-controlled things.
 abstract class ServerUpdatable {
+  // Server id for matching?
+  // void speculativeStartAction(NetAction action);
   void serverPositionChanged(Position serverPosition);
   void serverRemoved();
   // setActionState
-  // remove
 }
 
 // Interface from client Game into Player logic
 class Player {
   Client client;
   // This doesn't have to be a component, just an interface I can call to move.
-  ServerUpdatable component;
+  ServerUpdatable playerComponent;
 
-  Player(this.client, this.component);
+  Player(this.client, this.playerComponent);
 
   void moveTo(Vector2 gameCoords) {
     var netCoords = unitSystem.fromGameToNetCoords(gameCoords);
     // Start local (speculative) action.
+    // playerComponent.speculativeStartAction();
     // Send action to server.
     var input = NetClientInput(
       action: NetActionType.moveTo,

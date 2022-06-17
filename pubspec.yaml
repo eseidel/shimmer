@@ -40,6 +40,7 @@ dependencies:
       url: https://github.com/flame-engine/radiance
       ref: 13161dd # commit hash
   image: ^3.2.0
+  a_star_algorithm: ^0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ flutter:
     - assets/images/map.png
     - assets/images/checkerboard.png
     - assets/images/checker-4x4.png
+    - assets/images/obstacle.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,58 +1,9 @@
 // Server takes input from clients
+// Every server tick, server sends (full) update to all clients?
 
-// Every server tick, server sends (full) update to all clients.
-
-// Should ideally be same as client?
-import 'package:flame/components.dart';
+import 'package:shimmer_shared/network.dart';
 
 class World {}
-
-class NetworkAction {}
-
-enum NetActionType {
-  moveTo,
-}
-
-class NetClientInput {
-  const NetClientInput(this.action, this.position);
-
-  // action is probably a string?
-  final NetActionType action;
-  final Vector2 position;
-}
-
-class NetAction {
-  const NetAction(this.actionType, this.startTick);
-
-  final NetActionType actionType;
-  final int startTick;
-}
-
-class NetGameObject {
-  const NetGameObject(this.id, this.position, this.action);
-  final String id;
-  final Vector2 position;
-  final NetAction action;
-}
-
-class NetClientState {
-  // current ability timeouts?
-}
-
-class NetClientUpdate {
-  const NetClientUpdate(this.gameObjects, this.privateState);
-
-  // Should this split by visibility?
-  // e.g. "global info", "team info", "private info"?
-
-  // Visible object states?
-  // minion positions and action and startime
-  // player positions and action and startime
-  final List<NetGameObject> gameObjects;
-
-  // Per client specific state (like active abilies?)
-  final NetClientState privateState;
-}
 
 class ClientConnection {
   List<NetClientUpdate> fromServer = [];
@@ -90,13 +41,24 @@ class ServerPlayer {
   void applyInput(NetClientInput input) {}
 }
 
+// This is written assuming the Server can never get behind.
+// Unclear if that's a correct assumption?
+// If we need to be defensive against the server stalling that will mean we need
+// to hold a buffer of inputs from the client and apply them in time order
+// which doesn't seem ideal?  What happens if that buffer overflows?
 class Server {
 // Has a state of the world
 // Has a list of client connections
 // Has a list of client states.
 
+  DateTime startTime;
+  int msPerTick = 250;
+  int currentTick = 0;
+
   ServerNetwork net = ServerNetwork();
   Iterable<ServerPlayer> players = [];
+
+  Server() : startTime = DateTime.now();
 
   void processClientInput() {
     // Take a client input and process it
@@ -106,6 +68,7 @@ class Server {
 
     for (var player in players) {
       if (player.acceptingInput()) {
+        // This always assumes that the input is valid for this tick.
         var input = net.takeClientInput(player.clientId);
         if (input != null) {
           player.applyInput(input);
@@ -119,15 +82,25 @@ class Server {
     // Tell flame to tick?
   }
 
-// Ticks every serverTickDelta.
+  // Hack for now, Server does not expect to be allowed to get behind.
+  void tickIfNeeded(DateTime now) {
+    assert(now.isAfter(startTime));
+    var timeSinceStart = now.difference(startTime);
+    var tickTarget = timeSinceStart.inMilliseconds / msPerTick;
+    while (currentTick < tickTarget) {
+      tick();
+    }
+  }
+
   void tick() {
+    currentTick++;
     processClientInput();
     tickObjects();
     // Tell all the clients about what we did.
     broadcastCurrentStateToClients();
   }
 
-  List<NetGameObject> gameStateWithVision(VisionMask vision) {
+  List<NetGameObject> visibleGameObjects(VisionMask vision) {
     return [];
   }
 
@@ -138,7 +111,10 @@ class Server {
     // What is the per-client state (e.g. not shared with teammates?)
     for (var player in players) {
       var update = NetClientUpdate(
-          gameStateWithVision(player.vision), player.perPlayerState());
+        global: NetGlobalState(startTime),
+        visible: NetVisibleState(visibleGameObjects(player.vision)),
+        private: player.perPlayerState(),
+      );
       net.sendUpdateToClient(player.clientId, update);
     }
   }

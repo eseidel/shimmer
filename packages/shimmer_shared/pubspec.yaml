@@ -7,7 +7,6 @@ environment:
   sdk: '>=2.17.3 <3.0.0'
 
 dependencies:
-  flame: ^1.2.0
   radiance:
     git:
       url: https://github.com/flame-engine/radiance

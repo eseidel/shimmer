@@ -8,7 +8,8 @@ environment:
 
 dependencies:
   dart_frog: ^0.0.1-dev
-  shimmer_shared: any
+  shimmer_shared:
+    path: ../shimmer_shared
 
 dev_dependencies:
   mocktail: ^0.3.0

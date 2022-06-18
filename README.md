@@ -1,16 +1,47 @@
 # shimmer
 
-A new Flutter project.
+Playing with Flame and dart_frog.
 
-## Getting Started
+## Dependencies
 
-This project is a starting point for a Flutter application.
+You will need Flutter 3.0 or later.  Flutter will also install Dart.
+flutter.dev/install
 
-A few resources to get you started if this is your first Flutter project:
+You will want `melos` and `dart_frog` installed:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+`dart pub global activate melos`
+`dart pub global activate dart_frog`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Once you've done that `melos bootstrap` at the root will set up your workspace
+including fetching pub packages.
+
+### To launch the server:
+
+`cd packages/shimmer_server`
+`dart_frog dev`
+
+### To launch the client:
+`cd packages/shimmer_client`
+`flutter run`
+Also works fine from within an IDE.
+
+Edits you make to any of the above should be hot-reloaded automatically.
+
+If you plan to edit the @JsonSerializable classes, you will also need to run:
+`flutter packages pub run build_runner build`
+or to have it run continuously while you edit:
+`flutter pub run build_runner watch --delete-conflicting-outputs`
+
+### IDE Support
+
+You might want the Melos extension:
+https://marketplace.visualstudio.com/items?itemName=blaugold.melos-code
+
+If you're using intellij, you may wish to remove the:
+```
+ide:
+  intellij: false
+```
+line from melos.yaml and re-run `melos bootstrap` to generate .iml files.
+
+Patches welcome!

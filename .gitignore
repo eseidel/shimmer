@@ -31,6 +31,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 build/
+# Melos recommends using this but not checking in?  Not sure if this is needed.
+# https://melos.invertase.dev/configuration/overview#commandbootstrapusepubspecoverrides
+pubspec_overrides.yaml
 
 # Web related
 lib/generated_plugin_registrant.dart

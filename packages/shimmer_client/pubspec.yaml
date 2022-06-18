@@ -22,10 +22,6 @@ dependencies:
     sdk: flutter
 
   flame: ^1.2.0
-  radiance:
-    git:
-      url: https://github.com/flame-engine/radiance
-      ref: 13161dd # commit hash
   image: ^3.2.0
   a_star_algorithm: ^0.3.0
   shimmer_shared:

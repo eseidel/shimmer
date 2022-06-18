@@ -8,11 +8,11 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'package:radiance/steering.dart';
 
 import 'package:shimmer_shared/geometry.dart';
 import 'package:shimmer_shared/grid.dart';
 import 'player.dart';
+import 'package:shimmer_shared/steerable.dart';
 
 class UnitSystem {
   const UnitSystem();

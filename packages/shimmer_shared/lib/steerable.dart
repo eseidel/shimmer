@@ -22,7 +22,6 @@
 
 import 'dart:math';
 import 'package:vector_math/vector_math_64.dart';
-import 'package:meta/meta.dart';
 
 abstract class Steerable {
   Vector2 get position;
@@ -108,11 +107,6 @@ abstract class Kinematics {
   /// always satisfy the constraint that `own.kinematics == this`.
   late Steerable owner;
 
-  /// This method must be invoked by the [parent] once, when this object is
-  /// attached to the parent.
-  @mustCallSuper
-  void handleAttach(Steerable parent) => owner = parent;
-
   /// Invoked by the user to signal that time [dt] (in seconds) has passed
   /// within the system.
   ///
@@ -173,16 +167,11 @@ class SeekLight extends Seek {
 /// This method removes such ambiguity. The default implementation corresponds
 /// to angle 0 pointing rightwards, and angles growing in the counterclockwise
 /// direction.
-Vector2 Function(double angle) angleToVector = _defaultAngleToVector;
 
 /// Method to compute the orientation angle of a non-zero vector.
 ///
 /// This method must be the inverse of [angleToVector], modulo τ.
 double Function(Vector2 vector) vectorToAngle = _defaultVectorToAngle;
-
-Vector2 _defaultAngleToVector(double angle) {
-  return Vector2(cos(angle), -sin(angle));
-}
 
 double _defaultVectorToAngle(Vector2 vector) {
   return atan2(-vector.y, vector.x);

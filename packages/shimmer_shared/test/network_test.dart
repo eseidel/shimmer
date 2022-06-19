@@ -5,6 +5,7 @@ import 'package:shimmer_shared/network.dart';
 void main() {
   test('NetClientInput.toJson()', () {
     var input = NetClientInput(
+      header: NetMessageHeader('foo'),
       action: NetActionType.moveTo,
       position: Position(1, 2),
       msSinceStart: 3,

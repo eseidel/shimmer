@@ -120,7 +120,7 @@ class NavigationComponent extends Component with Steerable {
 
   @override
   void onMount() {
-    kinematics.handleAttach(this);
+    kinematics.owner = this;
     super.onMount();
   }
 

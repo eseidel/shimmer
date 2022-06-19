@@ -2,24 +2,26 @@
 // Every server tick, server sends (full) update to all clients?
 
 import 'package:shimmer_shared/network.dart';
-
-class World {}
+import 'package:shimmer_shared/entity.dart';
 
 class ClientConnection {
   List<NetClientUpdate> fromServer = [];
   List<NetClientInput> fromClient = [];
 }
 
-class ClientId {}
-
-enum VisionMask {
-  red,
-  blue,
-  all,
-}
+typedef ClientId = String;
 
 class ServerNetwork {
-  List<ClientConnection> clients = [];
+  Map<String, ClientConnection> clients = {};
+
+  ClientConnection lookupClient(ClientId clientId) {
+    var client = clients[clientId];
+    if (client == null) {
+      client = ClientConnection();
+      clients[clientId] = client;
+    }
+    return client;
+  }
 
   NetClientInput? takeClientInput(ClientId clientId) {
     return null;
@@ -41,6 +43,20 @@ class ServerPlayer {
   void applyInput(NetClientInput input) {}
 }
 
+class World {
+  List<Entity> gameObjects = [];
+
+  World();
+
+  void tickObjects(double dt) {
+    // Ask all objects to update.
+    for (var obj in gameObjects) {
+      // Server objects should work off of ticks rather than ms?
+      obj.update(dt);
+    }
+  }
+}
+
 // This is written assuming the Server can never get behind.
 // Unclear if that's a correct assumption?
 // If we need to be defensive against the server stalling that will mean we need
@@ -56,7 +72,8 @@ class Server {
   int currentTick = 0;
 
   ServerNetwork net = ServerNetwork();
-  Iterable<ServerPlayer> players = [];
+  List<ServerPlayer> players = [];
+  World world = World();
 
   Server() : startTime = DateTime.now();
 
@@ -77,9 +94,12 @@ class Server {
     }
   }
 
-  void tickObjects() {
-    // Ask all objects to update.
-    // Tell flame to tick?
+  void tick() {
+    currentTick++;
+    processClientInput();
+    world.tickObjects(msPerTick / 1000);
+    // Tell all the clients about what we did.
+    broadcastCurrentStateToClients();
   }
 
   // Hack for now, Server does not expect to be allowed to get behind.
@@ -92,16 +112,11 @@ class Server {
     }
   }
 
-  void tick() {
-    currentTick++;
-    processClientInput();
-    tickObjects();
-    // Tell all the clients about what we did.
-    broadcastCurrentStateToClients();
-  }
-
   List<NetGameObject> visibleGameObjects(VisionMask vision) {
-    return [];
+    return world.gameObjects
+        .where((e) => e.visibleTo(vision))
+        .map((e) => e.toNetGameObject())
+        .toList();
   }
 
   void broadcastCurrentStateToClients() {
@@ -119,3 +134,25 @@ class Server {
     }
   }
 }
+
+// Things I would like in an event system.
+// broadast.
+// typed event delivery
+// event types which deliver even when not listened initially.
+
+
+// Has the gameplay logic, including starting the game, etc.
+class Shimmer {
+  // Should this be event driven?  e.g. onStart?
+
+  // States
+  // Waiting for clients
+  // Countdown until start.
+  // Various events driven from time.
+
+  // OnClientConnected
+
+}
+
+// Hack for now.
+Server sharedServer = Server();

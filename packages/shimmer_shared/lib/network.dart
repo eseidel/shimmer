@@ -8,13 +8,58 @@ enum NetActionType {
   moveTo,
 }
 
+// @JsonSerializable(explicitToJson: true)
+// class NetConnectClient {
+//   final String userId;
+
+//   const NetConnectClient(this.userId);
+
+//   factory NetConnectClient.fromJson(Map<String, dynamic> json) =>
+//       _$NetConnectClientFromJson(json);
+//   Map<String, dynamic> toJson() => _$NetConnectClientToJson(this);
+// }
+
+// @JsonSerializable(explicitToJson: true)
+// class NetEnvelope {
+//   const NetEnvelope(this.clientId, this.content);
+//   final String clientId;
+//   final NetMessageContent content;
+
+//   factory NetEnvelope.fromJson(Map<String, dynamic> json) =>
+//       _$NetEnvelopeFromJson(json);
+//   Map<String, dynamic> toJson() => _$NetEnvelopeToJson(this);
+// }
+
+// @JsonSerializable(explicitToJson: true)
+// class NetMessageContent {
+//   const NetMessageContent();
+
+//   // factory NetMessageContent.fromJson(Map<String, dynamic> json) =>
+//   //     _$NetMessageContentFromJson(json);
+//   // Map<String, dynamic> toJson() => _$NetMessageContentToJson(this);
+// }
+
+@JsonSerializable(explicitToJson: true)
+class NetMessageHeader {
+  const NetMessageHeader(this.clientId);
+
+  final String clientId;
+
+  factory NetMessageHeader.fromJson(Map<String, dynamic> json) =>
+      _$NetMessageHeaderFromJson(json);
+  Map<String, dynamic> toJson() => _$NetMessageHeaderToJson(this);
+}
+
 @JsonSerializable(explicitToJson: true)
 class NetClientInput {
   const NetClientInput({
+    required this.header,
     required this.action,
     required this.position,
     required this.msSinceStart,
-  });
+  }) : super();
+
+  final NetMessageHeader header;
 
   // action is probably a string?
   final NetActionType action;
@@ -33,10 +78,12 @@ class NetAction {
 }
 
 class NetGameObject {
-  const NetGameObject(this.id, this.position, this.action);
+  const NetGameObject(this.id, this.position, this.angle);
+
   final String id;
   final Position position;
-  final NetAction action;
+  final double angle;
+  // final NetAction action;
 }
 
 class NetGlobalState {

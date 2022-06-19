@@ -4,6 +4,7 @@ import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/geometry.dart';
 
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Deals with actually sending things over the network from the client.
 class NetworkClient {
@@ -13,7 +14,7 @@ class NetworkClient {
 
   void sendInput(NetClientInput input) {
     var endpoint = baseEndpoint.resolve('input');
-    http.post(endpoint, body: input.toJson().toString());
+    http.post(endpoint, body: jsonEncode(input));
   }
 
   NetClientUpdate? getLatestUpdate() {
@@ -33,6 +34,8 @@ class Client {
   Client(Uri endpoint)
       : net = NetworkClient(endpoint),
         serverStartTime = DateTime.now();
+
+  NetMessageHeader header() => const NetMessageHeader("foo");
 
   int msSinceStart() =>
       DateTime.now().difference(serverStartTime).inMilliseconds;
@@ -61,6 +64,7 @@ class Player {
     // playerComponent.speculativeStartAction();
     // Send action to server.
     var input = NetClientInput(
+      header: client.header(),
       action: NetActionType.moveTo,
       position: netCoords,
       msSinceStart: client.msSinceStart(),

@@ -171,13 +171,13 @@ class ShimmerGame extends FlameGame with TapDetector {
   Future<void> onLoad() async {
     add(await loadMap());
     add(playerComponent = PlayerComponent(size: 50, position: size / 2));
-    var client = await connectToServer(Uri.parse("http://localhost:8080"));
+    var client = await connectToServer('localhost', 8080);
     player = Player(client, playerComponent);
     camera.followComponent(playerComponent);
   }
 
-  Future<Client> connectToServer(Uri endpoint) async {
-    return Client(endpoint);
+  Future<Client> connectToServer(String host, int port) async {
+    return Client(host, port);
   }
 
   Future<NewMap> loadMap() async {

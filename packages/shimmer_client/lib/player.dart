@@ -3,18 +3,40 @@ import 'package:shimmer_client/main.dart';
 import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/geometry.dart';
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:grpc/grpc.dart';
+import 'package:shimmer_shared/src/generated/helloworld.pbgrpc.dart';
 
 // Deals with actually sending things over the network from the client.
 class NetworkClient {
-  final Uri baseEndpoint;
+  final String host;
+  final int port;
 
-  NetworkClient(this.baseEndpoint);
+  NetworkClient(this.host, this.port);
 
-  void sendInput(NetClientInput input) {
-    var endpoint = baseEndpoint.resolve('input');
-    http.post(endpoint, body: jsonEncode(input));
+  void sendInput(NetClientInput input) async {
+    final channel = ClientChannel(
+      'localhost',
+      port: 50051,
+      options: ChannelOptions(
+        credentials: ChannelCredentials.insecure(),
+        codecRegistry:
+            CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
+      ),
+    );
+    final stub = GreeterClient(channel);
+
+    final name = 'world';
+
+    try {
+      final response = await stub.sayHello(
+        HelloRequest()..name = name,
+        options: CallOptions(compression: const GzipCodec()),
+      );
+      print('Greeter client received: ${response.message}');
+    } catch (e) {
+      print('Caught error: $e');
+    }
+    await channel.shutdown();
   }
 
   NetClientUpdate? getLatestUpdate() {
@@ -31,8 +53,8 @@ class Client {
   DateTime serverStartTime;
 
   // This is a hack/wrong.
-  Client(Uri endpoint)
-      : net = NetworkClient(endpoint),
+  Client(String host, int port)
+      : net = NetworkClient(host, port),
         serverStartTime = DateTime.now();
 
   NetMessageHeader header() => const NetMessageHeader("foo");

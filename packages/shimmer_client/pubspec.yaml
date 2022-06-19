@@ -26,7 +26,8 @@ dependencies:
   a_star_algorithm: ^0.3.0
   shimmer_shared:
     path: ../shimmer_shared
-  http: ^0.13.4
+  grpc: ^3.0.2
+  protobuf: ^2.1.0
 
 dev_dependencies:
   flutter_test:

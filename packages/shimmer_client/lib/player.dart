@@ -30,16 +30,16 @@ class NetworkClient {
         input,
         options: CallOptions(compression: const GzipCodec()),
       );
-      print('Input client received: $response');
+      print('Input client received: ${response.entities}');
     } catch (e) {
       print('Caught error: $e');
     }
     await channel.shutdown();
   }
 
-  NetClientUpdate? getLatestUpdate() {
-    return null;
-  }
+  // NetClientUpdate? getLatestUpdate() {
+  //   return null;
+  // }
 }
 
 // Holds the client side of server state.
@@ -55,7 +55,9 @@ class Client {
       : net = NetworkClient(host, port),
         serverStartTime = DateTime.now();
 
-  NetMessageHeader header() => const NetMessageHeader("foo");
+  // NetMessageHeader header() => const NetMessageHeader("foo");
+
+  String clientId() => "foo";
 
   int msSinceStart() =>
       DateTime.now().difference(serverStartTime).inMilliseconds;
@@ -84,9 +86,9 @@ class Player {
     // playerComponent.speculativeStartAction();
     // Send action to server.
     final input = InputRequest()
-      ..clientId = client.header().clientId
-      ..action = NetActionType.moveTo.name
-      ..position = InputRequest_Position(x: netCoords.x, y: netCoords.y)
+      ..clientId = client.clientId()
+      ..action = ActionType.moveTo.name
+      ..position = netCoords.toProto()
       ..msSinceStart = client.msSinceStart().toInt();
 
     client.net.sendInput(input);

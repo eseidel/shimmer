@@ -1,13 +1,12 @@
 // Server takes input from clients
 // Every server tick, server sends (full) update to all clients?
 
-import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/entity.dart';
 
 import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 
 class ClientConnection {
-  List<NetClientUpdate> fromServer = [];
+  List<ClientUpdate> fromServer = [];
   List<InputRequest> fromClient = [];
 }
 
@@ -29,7 +28,7 @@ class ServerNetwork {
     return null;
   }
 
-  void sendUpdateToClient(ClientId clientId, NetClientUpdate update) {}
+  // void sendUpdateToClient(ClientId clientId, ClientUpdate update) {}
 }
 
 class ServerPlayer {
@@ -40,7 +39,7 @@ class ServerPlayer {
 
   bool acceptingInput() => true;
 
-  NetClientState perPlayerState() => NetClientState();
+  // NetClientState perPlayerState() => NetClientState();
 
   void applyInput(InputRequest input) {}
 }
@@ -101,7 +100,7 @@ class ShimmerServer {
     processClientInput();
     world.tickObjects(msPerTick / 1000);
     // Tell all the clients about what we did.
-    broadcastCurrentStateToClients();
+    // broadcastCurrentStateToClients();
   }
 
   // Hack for now, Server does not expect to be allowed to get behind.
@@ -114,27 +113,27 @@ class ShimmerServer {
     }
   }
 
-  List<NetGameObject> visibleGameObjects(VisionMask vision) {
+  List<EntityProto> visibleGameObjects(VisionMask vision) {
     return world.gameObjects
         .where((e) => e.visibleTo(vision))
-        .map((e) => e.toNetGameObject())
+        .map((e) => e.toProto())
         .toList();
   }
 
-  void broadcastCurrentStateToClients() {
-    // Get the per-team visibility mask.
-    // Generate current gamestate with visbility mask.
-    // Broadcast state to all clients on team.
-    // What is the per-client state (e.g. not shared with teammates?)
-    for (var player in players) {
-      var update = NetClientUpdate(
-        global: NetGlobalState(startTime),
-        visible: NetVisibleState(visibleGameObjects(player.vision)),
-        private: player.perPlayerState(),
-      );
-      net.sendUpdateToClient(player.clientId, update);
-    }
-  }
+  // void broadcastCurrentStateToClients() {
+  //   // Get the per-team visibility mask.
+  //   // Generate current gamestate with visbility mask.
+  //   // Broadcast state to all clients on team.
+  //   // What is the per-client state (e.g. not shared with teammates?)
+  //   for (var player in players) {
+  //     var update = NetClientUpdate(
+  //       global: NetGlobalState(startTime),
+  //       visible: NetVisibleState(visibleGameObjects(player.vision)),
+  //       private: player.perPlayerState(),
+  //     );
+  //     net.sendUpdateToClient(player.clientId, update);
+  //   }
+  // }
 }
 
 // Things I would like in an event system.

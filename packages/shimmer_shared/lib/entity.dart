@@ -1,6 +1,6 @@
-import 'package:shimmer_shared/geometry.dart';
 import 'package:shimmer_shared/network.dart';
 import 'package:vector_math/vector_math_64.dart';
+import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 // Shouldn't depend on navigation.
 import 'navigation.dart';
 
@@ -39,9 +39,14 @@ class Entity {
     return visionMask == VisionMask.all || visionMask == mask;
   }
 
-  NetGameObject toNetGameObject() {
-    return NetGameObject(
-        id, Position(position.x.floor(), position.y.floor()), angle);
+  EntityProto toProto() {
+    return EntityProto(
+      id: id,
+      position: position.toProto(),
+      // velocity: velocity.toProto(),
+      // angle: angle,
+      // visionMask: visionMask.index,
+    );
   }
 
   // Collision system?

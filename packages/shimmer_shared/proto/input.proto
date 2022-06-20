@@ -3,18 +3,24 @@ syntax = "proto3";
 package input;
 
 service InputService {
-  rpc SendInput(InputRequest) returns (InputReply) {}
+  rpc SendInput(InputRequest) returns (ClientUpdate) {}
+}
+
+message PositionProto {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message EntityProto {
+  string id = 1;
+  PositionProto position = 2;
 }
 
 message InputRequest {
   string clientId = 1;
   string action = 2;
-  message Position {
-    int32 x = 1;
-    int32 y = 2;
-  }
-  Position position = 3;
+  PositionProto position = 3;
   int32 msSinceStart = 4;
 }
 
-message InputReply {}
+message ClientUpdate { repeated EntityProto entities = 1; }

@@ -14,17 +14,18 @@ import 'input.pb.dart' as $0;
 export 'input.pb.dart';
 
 class InputServiceClient extends $grpc.Client {
-  static final _$sendInput = $grpc.ClientMethod<$0.InputRequest, $0.InputReply>(
-      '/input.InputService/SendInput',
-      ($0.InputRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.InputReply.fromBuffer(value));
+  static final _$sendInput =
+      $grpc.ClientMethod<$0.InputRequest, $0.ClientUpdate>(
+          '/input.InputService/SendInput',
+          ($0.InputRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.ClientUpdate.fromBuffer(value));
 
   InputServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.InputReply> sendInput($0.InputRequest request,
+  $grpc.ResponseFuture<$0.ClientUpdate> sendInput($0.InputRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$sendInput, request, options: options);
   }
@@ -34,20 +35,20 @@ abstract class InputServiceBase extends $grpc.Service {
   $core.String get $name => 'input.InputService';
 
   InputServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.InputRequest, $0.InputReply>(
+    $addMethod($grpc.ServiceMethod<$0.InputRequest, $0.ClientUpdate>(
         'SendInput',
         sendInput_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.InputRequest.fromBuffer(value),
-        ($0.InputReply value) => value.writeToBuffer()));
+        ($0.ClientUpdate value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.InputReply> sendInput_Pre(
+  $async.Future<$0.ClientUpdate> sendInput_Pre(
       $grpc.ServiceCall call, $async.Future<$0.InputRequest> request) async {
     return sendInput(call, await request);
   }
 
-  $async.Future<$0.InputReply> sendInput(
+  $async.Future<$0.ClientUpdate> sendInput(
       $grpc.ServiceCall call, $0.InputRequest request);
 }

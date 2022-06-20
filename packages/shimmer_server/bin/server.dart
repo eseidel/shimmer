@@ -1,24 +1,13 @@
 import 'package:grpc/grpc.dart';
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
-
-import 'package:shimmer_server/server.dart';
-import 'package:shimmer_shared/entity.dart';
-
-class InputService extends InputServiceBase {
-  @override
-  Future<InputReply> sendInput(ServiceCall call, InputRequest input) async {
-    var client = sharedServer.net.lookupClient(input.clientId);
-    client.fromClient.add(input);
-    sharedServer.tickIfNeeded(DateTime.now());
-    var objects = sharedServer.visibleGameObjects(VisionMask.all);
-    print(objects);
-    return InputReply();
-  }
-}
+import 'package:shimmer_server/services/input.dart';
 
 Future<void> main(List<String> args) async {
+  List<Service> services = [
+    InputService(),
+  ];
+
   final server = Server(
-    [InputService()],
+    services,
     const <Interceptor>[],
     CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
   );

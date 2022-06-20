@@ -9,15 +9,15 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class InputRequest_Position extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InputRequest.Position', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
+class PositionProto extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PositionProto', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'x', $pb.PbFieldType.O3)
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'y', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  InputRequest_Position._() : super();
-  factory InputRequest_Position({
+  PositionProto._() : super();
+  factory PositionProto({
     $core.int? x,
     $core.int? y,
   }) {
@@ -30,26 +30,26 @@ class InputRequest_Position extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory InputRequest_Position.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory InputRequest_Position.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory PositionProto.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PositionProto.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  InputRequest_Position clone() => InputRequest_Position()..mergeFromMessage(this);
+  PositionProto clone() => PositionProto()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InputRequest_Position copyWith(void Function(InputRequest_Position) updates) => super.copyWith((message) => updates(message as InputRequest_Position)) as InputRequest_Position; // ignore: deprecated_member_use
+  PositionProto copyWith(void Function(PositionProto) updates) => super.copyWith((message) => updates(message as PositionProto)) as PositionProto; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static InputRequest_Position create() => InputRequest_Position._();
-  InputRequest_Position createEmptyInstance() => create();
-  static $pb.PbList<InputRequest_Position> createRepeated() => $pb.PbList<InputRequest_Position>();
+  static PositionProto create() => PositionProto._();
+  PositionProto createEmptyInstance() => create();
+  static $pb.PbList<PositionProto> createRepeated() => $pb.PbList<PositionProto>();
   @$core.pragma('dart2js:noInline')
-  static InputRequest_Position getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InputRequest_Position>(create);
-  static InputRequest_Position? _defaultInstance;
+  static PositionProto getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PositionProto>(create);
+  static PositionProto? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get x => $_getIZ(0);
@@ -70,11 +70,74 @@ class InputRequest_Position extends $pb.GeneratedMessage {
   void clearY() => clearField(2);
 }
 
+class EntityProto extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'EntityProto', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOM<PositionProto>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'position', subBuilder: PositionProto.create)
+    ..hasRequiredFields = false
+  ;
+
+  EntityProto._() : super();
+  factory EntityProto({
+    $core.String? id,
+    PositionProto? position,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (position != null) {
+      _result.position = position;
+    }
+    return _result;
+  }
+  factory EntityProto.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory EntityProto.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  EntityProto clone() => EntityProto()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  EntityProto copyWith(void Function(EntityProto) updates) => super.copyWith((message) => updates(message as EntityProto)) as EntityProto; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static EntityProto create() => EntityProto._();
+  EntityProto createEmptyInstance() => create();
+  static $pb.PbList<EntityProto> createRepeated() => $pb.PbList<EntityProto>();
+  @$core.pragma('dart2js:noInline')
+  static EntityProto getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EntityProto>(create);
+  static EntityProto? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  PositionProto get position => $_getN(1);
+  @$pb.TagNumber(2)
+  set position(PositionProto v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPosition() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPosition() => clearField(2);
+  @$pb.TagNumber(2)
+  PositionProto ensurePosition() => $_ensure(1);
+}
+
 class InputRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InputRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'clientId', protoName: 'clientId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'action')
-    ..aOM<InputRequest_Position>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'position', subBuilder: InputRequest_Position.create)
+    ..aOM<PositionProto>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'position', subBuilder: PositionProto.create)
     ..a<$core.int>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'msSinceStart', $pb.PbFieldType.O3, protoName: 'msSinceStart')
     ..hasRequiredFields = false
   ;
@@ -83,7 +146,7 @@ class InputRequest extends $pb.GeneratedMessage {
   factory InputRequest({
     $core.String? clientId,
     $core.String? action,
-    InputRequest_Position? position,
+    PositionProto? position,
     $core.int? msSinceStart,
   }) {
     final _result = create();
@@ -141,15 +204,15 @@ class InputRequest extends $pb.GeneratedMessage {
   void clearAction() => clearField(2);
 
   @$pb.TagNumber(3)
-  InputRequest_Position get position => $_getN(2);
+  PositionProto get position => $_getN(2);
   @$pb.TagNumber(3)
-  set position(InputRequest_Position v) { setField(3, v); }
+  set position(PositionProto v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasPosition() => $_has(2);
   @$pb.TagNumber(3)
   void clearPosition() => clearField(3);
   @$pb.TagNumber(3)
-  InputRequest_Position ensurePosition() => $_ensure(2);
+  PositionProto ensurePosition() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.int get msSinceStart => $_getIZ(3);
@@ -161,32 +224,44 @@ class InputRequest extends $pb.GeneratedMessage {
   void clearMsSinceStart() => clearField(4);
 }
 
-class InputReply extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InputReply', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
+class ClientUpdate extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientUpdate', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'input'), createEmptyInstance: create)
+    ..pc<EntityProto>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'entities', $pb.PbFieldType.PM, subBuilder: EntityProto.create)
     ..hasRequiredFields = false
   ;
 
-  InputReply._() : super();
-  factory InputReply() => create();
-  factory InputReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory InputReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  ClientUpdate._() : super();
+  factory ClientUpdate({
+    $core.Iterable<EntityProto>? entities,
+  }) {
+    final _result = create();
+    if (entities != null) {
+      _result.entities.addAll(entities);
+    }
+    return _result;
+  }
+  factory ClientUpdate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientUpdate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  InputReply clone() => InputReply()..mergeFromMessage(this);
+  ClientUpdate clone() => ClientUpdate()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InputReply copyWith(void Function(InputReply) updates) => super.copyWith((message) => updates(message as InputReply)) as InputReply; // ignore: deprecated_member_use
+  ClientUpdate copyWith(void Function(ClientUpdate) updates) => super.copyWith((message) => updates(message as ClientUpdate)) as ClientUpdate; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static InputReply create() => InputReply._();
-  InputReply createEmptyInstance() => create();
-  static $pb.PbList<InputReply> createRepeated() => $pb.PbList<InputReply>();
+  static ClientUpdate create() => ClientUpdate._();
+  ClientUpdate createEmptyInstance() => create();
+  static $pb.PbList<ClientUpdate> createRepeated() => $pb.PbList<ClientUpdate>();
   @$core.pragma('dart2js:noInline')
-  static InputReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InputReply>(create);
-  static InputReply? _defaultInstance;
+  static ClientUpdate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientUpdate>(create);
+  static ClientUpdate? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<EntityProto> get entities => $_getList(0);
 }
 

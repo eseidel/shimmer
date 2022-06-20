@@ -1,11 +1,18 @@
 import 'geometry.dart';
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:vector_math/vector_math_64.dart';
+import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 
-part 'network.g.dart';
-
-enum NetActionType {
+enum ActionType {
   moveTo,
+}
+
+extension Vector2Proto on Vector2 {
+  PositionProto toProto() => PositionProto(x: x.toInt(), y: y.toInt());
+}
+
+extension PostionProtoExtension on Position {
+  PositionProto toProto() => PositionProto(x: x, y: y);
 }
 
 // @JsonSerializable(explicitToJson: true)
@@ -39,16 +46,16 @@ enum NetActionType {
 //   // Map<String, dynamic> toJson() => _$NetMessageContentToJson(this);
 // }
 
-@JsonSerializable(explicitToJson: true)
-class NetMessageHeader {
-  const NetMessageHeader(this.clientId);
+// @JsonSerializable(explicitToJson: true)
+// class NetMessageHeader {
+//   const NetMessageHeader(this.clientId);
 
-  final String clientId;
+//   final String clientId;
 
-  factory NetMessageHeader.fromJson(Map<String, dynamic> json) =>
-      _$NetMessageHeaderFromJson(json);
-  Map<String, dynamic> toJson() => _$NetMessageHeaderToJson(this);
-}
+//   factory NetMessageHeader.fromJson(Map<String, dynamic> json) =>
+//       _$NetMessageHeaderFromJson(json);
+//   Map<String, dynamic> toJson() => _$NetMessageHeaderToJson(this);
+// }
 
 // @JsonSerializable(explicitToJson: true)
 // class NetClientInput {
@@ -71,53 +78,53 @@ class NetMessageHeader {
 //   Map<String, dynamic> toJson() => _$NetClientInputToJson(this);
 // }
 
-class NetAction {
-  const NetAction(this.actionType);
+// class NetAction {
+//   const NetAction(this.actionType);
 
-  final NetActionType actionType;
-}
+//   final NetActionType actionType;
+// }
 
-class NetGameObject {
-  const NetGameObject(this.id, this.position, this.angle);
+// class NetGameObject {
+//   const NetGameObject(this.id, this.position, this.angle);
 
-  final String id;
-  final Position position;
-  final double angle;
-  // final NetAction action;
-}
+//   final String id;
+//   final Position position;
+//   final double angle;
+//   // final NetAction action;
+// }
 
-class NetGlobalState {
-  const NetGlobalState(this.startTime);
-  final DateTime startTime;
-}
+// class NetGlobalState {
+//   const NetGlobalState(this.startTime);
+//   final DateTime startTime;
+// }
 
-class NetClientState {
-  // current ability timeouts?
-}
+// class NetClientState {
+//   // current ability timeouts?
+// }
 
-class NetVisibleState {
-  const NetVisibleState(this.gameObjects);
-  final List<NetGameObject> gameObjects;
-}
+// class NetVisibleState {
+//   const NetVisibleState(this.gameObjects);
+//   final List<NetGameObject> gameObjects;
+// }
 
-class NetClientUpdate {
-  const NetClientUpdate({
-    required this.global,
-    required this.visible,
-    required this.private,
-  });
+// class NetClientUpdate {
+//   const NetClientUpdate({
+//     required this.global,
+//     required this.visible,
+//     required this.private,
+//   });
 
-  // Should this split by visibility?
-  // e.g. "global info", "team info", "private info"?
+//   // Should this split by visibility?
+//   // e.g. "global info", "team info", "private info"?
 
-  // Server start time, scoreboard, etc.
-  final NetGlobalState global;
-  // Team state.
-  // Visible objects.
-  // Visible actions in progress.
-  // Last known information about opponents, etc.
-  final NetVisibleState visible;
+//   // Server start time, scoreboard, etc.
+//   final NetGlobalState global;
+//   // Team state.
+//   // Visible objects.
+//   // Visible actions in progress.
+//   // Last known information about opponents, etc.
+//   final NetVisibleState visible;
 
-  // Per client specific state (like active abilies?)
-  final NetClientState private;
-}
+//   // Per client specific state (like active abilies?)
+//   final NetClientState private;
+// }

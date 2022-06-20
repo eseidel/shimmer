@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   grpc: ^3.0.2
-  json_annotation: ^4.5.0
   protobuf: ^2.1.0
   vector_math: ^2.1.2
 
@@ -17,6 +16,5 @@ dev_dependencies:
   # Doesn't seem to work
   # https://github.com/pikaju/dart-protoc-builder/issues/5
   # protoc_builder: ^0.2.1+1
-  json_serializable: ^6.2.0
   lints: ^2.0.0
   test: ^1.16.0

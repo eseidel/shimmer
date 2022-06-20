@@ -1,9 +1,5 @@
 import 'dart:math';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'geometry.g.dart';
-
 class Delta {
   final int dx;
   final int dy;
@@ -57,7 +53,6 @@ class Delta {
   }
 }
 
-@JsonSerializable()
 class Position {
   final int x;
   final int y;
@@ -66,9 +61,7 @@ class Position {
 
   static const zero = Position(0, 0);
 
-  Delta deltaTo(Position other) {
-    return Delta(other.x - x, other.y - y);
-  }
+  Delta deltaTo(Position other) => Delta(other.x - x, other.y - y);
 
   @override
   String toString() => '($x, $y)';
@@ -92,13 +85,7 @@ class Position {
   }
 
   @override
-  int get hashCode {
-    return Object.hash(x, y);
-  }
-
-  factory Position.fromJson(Map<String, dynamic> json) =>
-      _$PositionFromJson(json);
-  Map<String, dynamic> toJson() => _$PositionToJson(this);
+  int get hashCode => Object.hash(x, y);
 }
 
 class ISize {

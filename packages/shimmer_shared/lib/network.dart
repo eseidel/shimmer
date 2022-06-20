@@ -50,26 +50,26 @@ class NetMessageHeader {
   Map<String, dynamic> toJson() => _$NetMessageHeaderToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
-class NetClientInput {
-  const NetClientInput({
-    required this.header,
-    required this.action,
-    required this.position,
-    required this.msSinceStart,
-  }) : super();
+// @JsonSerializable(explicitToJson: true)
+// class NetClientInput {
+//   const NetClientInput({
+//     required this.header,
+//     required this.action,
+//     required this.position,
+//     required this.msSinceStart,
+//   }) : super();
 
-  final NetMessageHeader header;
+//   final NetMessageHeader header;
 
-  // action is probably a string?
-  final NetActionType action;
-  final Position position;
-  final int msSinceStart;
+//   // action is probably a string?
+//   final NetActionType action;
+//   final Position position;
+//   final int msSinceStart;
 
-  factory NetClientInput.fromJson(Map<String, dynamic> json) =>
-      _$NetClientInputFromJson(json);
-  Map<String, dynamic> toJson() => _$NetClientInputToJson(this);
-}
+//   factory NetClientInput.fromJson(Map<String, dynamic> json) =>
+//       _$NetClientInputFromJson(json);
+//   Map<String, dynamic> toJson() => _$NetClientInputToJson(this);
+// }
 
 class NetAction {
   const NetAction(this.actionType);

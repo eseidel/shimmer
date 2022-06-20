@@ -4,9 +4,11 @@
 import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/entity.dart';
 
+import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
+
 class ClientConnection {
   List<NetClientUpdate> fromServer = [];
-  List<NetClientInput> fromClient = [];
+  List<InputRequest> fromClient = [];
 }
 
 typedef ClientId = String;
@@ -23,7 +25,7 @@ class ServerNetwork {
     return client;
   }
 
-  NetClientInput? takeClientInput(ClientId clientId) {
+  InputRequest? takeClientInput(ClientId clientId) {
     return null;
   }
 
@@ -40,7 +42,7 @@ class ServerPlayer {
 
   NetClientState perPlayerState() => NetClientState();
 
-  void applyInput(NetClientInput input) {}
+  void applyInput(InputRequest input) {}
 }
 
 class World {
@@ -62,7 +64,7 @@ class World {
 // If we need to be defensive against the server stalling that will mean we need
 // to hold a buffer of inputs from the client and apply them in time order
 // which doesn't seem ideal?  What happens if that buffer overflows?
-class Server {
+class ShimmerServer {
 // Has a state of the world
 // Has a list of client connections
 // Has a list of client states.
@@ -75,7 +77,7 @@ class Server {
   List<ServerPlayer> players = [];
   World world = World();
 
-  Server() : startTime = DateTime.now();
+  ShimmerServer() : startTime = DateTime.now();
 
   void processClientInput() {
     // Take a client input and process it
@@ -140,7 +142,6 @@ class Server {
 // typed event delivery
 // event types which deliver even when not listened initially.
 
-
 // Has the gameplay logic, including starting the game, etc.
 class Shimmer {
   // Should this be event driven?  e.g. onStart?
@@ -155,4 +156,4 @@ class Shimmer {
 }
 
 // Hack for now.
-Server sharedServer = Server();
+ShimmerServer sharedServer = ShimmerServer();

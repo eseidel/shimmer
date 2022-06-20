@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package input;
+
+service InputService {
+  rpc SendInput(InputRequest) returns (InputReply) {}
+}
+
+message InputRequest {
+  string clientId = 1;
+  string action = 2;
+  message Position {
+    int32 x = 1;
+    int32 y = 2;
+  }
+  Position position = 3;
+  int32 msSinceStart = 4;
+}
+
+message InputReply {}

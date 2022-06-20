@@ -14,6 +14,9 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.1.11
+  # Doesn't seem to work
+  # https://github.com/pikaju/dart-protoc-builder/issues/5
+  # protoc_builder: ^0.2.1+1
   json_serializable: ^6.2.0
   lints: ^2.0.0
   test: ^1.16.0

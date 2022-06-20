@@ -4,7 +4,7 @@ import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/geometry.dart';
 
 import 'package:grpc/grpc.dart';
-import 'package:shimmer_shared/src/generated/helloworld.pbgrpc.dart';
+import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 
 // Deals with actually sending things over the network from the client.
 class NetworkClient {
@@ -13,26 +13,24 @@ class NetworkClient {
 
   NetworkClient(this.host, this.port);
 
-  void sendInput(NetClientInput input) async {
+  void sendInput(InputRequest input) async {
     final channel = ClientChannel(
       'localhost',
       port: 50051,
       options: ChannelOptions(
-        credentials: ChannelCredentials.insecure(),
+        credentials: const ChannelCredentials.insecure(),
         codecRegistry:
             CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
       ),
     );
-    final stub = GreeterClient(channel);
-
-    final name = 'world';
+    final stub = InputServiceClient(channel);
 
     try {
-      final response = await stub.sayHello(
-        HelloRequest()..name = name,
+      final response = await stub.sendInput(
+        input,
         options: CallOptions(compression: const GzipCodec()),
       );
-      print('Greeter client received: ${response.message}');
+      print('Input client received: $response');
     } catch (e) {
       print('Caught error: $e');
     }
@@ -85,12 +83,12 @@ class Player {
     // Start local (speculative) action.
     // playerComponent.speculativeStartAction();
     // Send action to server.
-    var input = NetClientInput(
-      header: client.header(),
-      action: NetActionType.moveTo,
-      position: netCoords,
-      msSinceStart: client.msSinceStart(),
-    );
+    final input = InputRequest()
+      ..clientId = client.header().clientId
+      ..action = NetActionType.moveTo.name
+      ..position = InputRequest_Position(x: netCoords.x, y: netCoords.y)
+      ..msSinceStart = client.msSinceStart().toInt();
+
     client.net.sendInput(input);
   }
 }

@@ -1,16 +1,24 @@
 import 'package:grpc/grpc.dart';
-import 'package:shimmer_shared/src/generated/helloworld.pbgrpc.dart';
+import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 
-class GreeterService extends GreeterServiceBase {
+import 'package:shimmer_server/server.dart';
+import 'package:shimmer_shared/entity.dart';
+
+class InputService extends InputServiceBase {
   @override
-  Future<HelloReply> sayHello(ServiceCall call, HelloRequest request) async {
-    return HelloReply()..message = 'Hello, ${request.name}!';
+  Future<InputReply> sendInput(ServiceCall call, InputRequest input) async {
+    var client = sharedServer.net.lookupClient(input.clientId);
+    client.fromClient.add(input);
+    sharedServer.tickIfNeeded(DateTime.now());
+    var objects = sharedServer.visibleGameObjects(VisionMask.all);
+    print(objects);
+    return InputReply();
   }
 }
 
 Future<void> main(List<String> args) async {
   final server = Server(
-    [GreeterService()],
+    [InputService()],
     const <Interceptor>[],
     CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
   );

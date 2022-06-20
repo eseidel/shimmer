@@ -2,8 +2,7 @@
 // Every server tick, server sends (full) update to all clients?
 
 import 'package:shimmer_shared/entity.dart';
-
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
+import 'package:shimmer_shared/network.dart';
 
 class ClientConnection {
   List<ClientUpdate> fromServer = [];

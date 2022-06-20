@@ -2,7 +2,7 @@ import 'package:grpc/grpc.dart';
 
 import 'package:shimmer_server/server.dart';
 import 'package:shimmer_shared/entity.dart';
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
+import 'package:shimmer_shared/network.dart';
 
 class InputService extends InputServiceBase {
   @override

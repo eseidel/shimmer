@@ -1,7 +1,9 @@
 import 'geometry.dart';
 
 import 'package:vector_math/vector_math_64.dart';
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
+import 'src/generated/input.pbgrpc.dart';
+
+export 'src/generated/input.pbgrpc.dart';
 
 enum ActionType {
   moveTo,

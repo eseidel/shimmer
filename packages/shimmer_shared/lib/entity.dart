@@ -1,6 +1,5 @@
 import 'package:shimmer_shared/network.dart';
 import 'package:vector_math/vector_math_64.dart';
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 // Shouldn't depend on navigation.
 import 'navigation.dart';
 

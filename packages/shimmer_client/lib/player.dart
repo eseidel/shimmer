@@ -4,7 +4,6 @@ import 'package:shimmer_shared/network.dart';
 import 'package:shimmer_shared/geometry.dart';
 
 import 'package:grpc/grpc.dart';
-import 'package:shimmer_shared/src/generated/input.pbgrpc.dart';
 
 // Deals with actually sending things over the network from the client.
 class NetworkClient {
